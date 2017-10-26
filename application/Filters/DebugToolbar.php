@@ -9,7 +9,7 @@ use Config\Services;
 class DebugToolbar implements FilterInterface
 {
 	/**
-	 * We don't need to do anything here.
+	 *
 	 *
 	 * @param RequestInterface|\CodeIgniter\HTTP\IncomingRequest $request
 	 *
@@ -17,7 +17,32 @@ class DebugToolbar implements FilterInterface
 	 */
 	public function before(RequestInterface $request)
 	{
+		if ($request->getGet('debugbar') !== null)
+        {
+        	ob_start();
+	        include(BASEPATH . 'Debug/Toolbar/toolbarloader.js.php');
+	        $output = ob_get_contents();
+	        @ob_end_clean();
+		    exit($output);
+		}
 
+		if ($request->getGet('debugbar_time'))
+		{
+			helper('security');
+
+			$file = sanitize_filename('debugbar_' . $request->getGet('debugbar_time'));
+		    $filename = WRITEPATH . sanitize_filename('debugbar_' . $request->getGet('debugbar_time'));
+
+		    if (file_exists($filename))
+		    {
+		    	$contents = file_get_contents($filename);
+		    	unlink($filename);
+			    exit($contents);
+		    }
+
+			// File was not written or do not exists
+		    exit('<script id="toolbar_js">console.log(\'CI DebugBar: File "WRITEPATH/' . $file . '" not found.\')</script>');
+		}
 	}
 
 	//--------------------------------------------------------------------
