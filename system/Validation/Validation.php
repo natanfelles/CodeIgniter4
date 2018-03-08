@@ -319,9 +319,9 @@ class Validation implements ValidationInterface
 	 * @param string      $rules
 	 * @param array       $errors
 	 *
-	 * @return $this
+	 * @return Validation
 	 */
-	public function setRule(string $field, string $label = null, string $rules, array $errors = [])
+	public function setRule(string $field, string $label = null, string $rules, array $errors = []): Validation
 	{
 		$this->rules[$field] = [
 			'label' => $label,
@@ -689,7 +689,7 @@ class Validation implements ValidationInterface
 	 * Resets the class to a blank slate. Should be called whenever
 	 * you need to process more than one array.
 	 *
-	 * @return mixed
+	 * @return ValidationInterface
 	 */
 	public function reset(): ValidationInterface
 	{

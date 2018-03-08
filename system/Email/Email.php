@@ -404,7 +404,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function initialize($config)
+	public function initialize($config): Email
 	{
 		$this->clear();
 
@@ -440,7 +440,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function clear($clearAttachments = false)
+	public function clear($clearAttachments = false): Email
 	{
 		$this->subject      = '';
 		$this->body         = '';
@@ -474,7 +474,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setFrom($from, $name = '', $returnPath = null)
+	public function setFrom($from, $name = '', $returnPath = null): Email
 	{
 		if (preg_match('/\<(.*)\>/', $from, $match))
 		{
@@ -523,7 +523,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setReplyTo($replyto, $name = '')
+	public function setReplyTo($replyto, $name = ''): Email
 	{
 		if (preg_match('/\<(.*)\>/', $replyto, $match))
 		{
@@ -564,7 +564,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setTo($to)
+	public function setTo($to): Email
 	{
 		$to = $this->stringToArray($to);
 		$to = $this->cleanEmail($to);
@@ -593,7 +593,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setCC($cc)
+	public function setCC($cc): Email
 	{
 		$cc = $this->cleanEmail($this->stringToArray($cc));
 
@@ -622,7 +622,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setBCC($bcc, $limit = '')
+	public function setBCC($bcc, $limit = ''): Email
 	{
 		if ($limit !== '' && is_numeric($limit))
 		{
@@ -658,7 +658,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setSubject($subject)
+	public function setSubject($subject): Email
 	{
 		$subject = $this->prepQEncoding($subject);
 		$this->setHeader('Subject', $subject);
@@ -675,7 +675,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setMessage($body)
+	public function setMessage($body): Email
 	{
 		$this->body = rtrim(str_replace("\r", '', $body));
 
@@ -692,7 +692,7 @@ class Email
 	 * @param string|null $newname
 	 * @param string      $mime
 	 *
-	 * @return Email
+	 * @return Email|bool
 	 */
 	public function attach($file, $disposition = '', $newname = null, $mime = '')
 	{
@@ -770,7 +770,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setHeader($header, $value)
+	public function setHeader($header, $value): Email
 	{
 		$this->headers[$header] = str_replace(["\n", "\r"], '', $value);
 
@@ -807,7 +807,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setAltMessage($str)
+	public function setAltMessage($str): Email
 	{
 		$this->altMessage = (string)$str;
 
@@ -823,7 +823,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setMailType($type = 'text')
+	public function setMailType($type = 'text'): Email
 	{
 		$this->mailType = ($type === 'html') ? 'html' : 'text';
 
@@ -839,7 +839,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setWordWrap($wordWrap = true)
+	public function setWordWrap($wordWrap = true): Email
 	{
 		$this->wordWrap = (bool)$wordWrap;
 
@@ -855,7 +855,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setProtocol($protocol = 'mail')
+	public function setProtocol($protocol = 'mail'): Email
 	{
 		$this->protocol = in_array($protocol, $this->protocols, true) ? strtolower($protocol) : 'mail';
 
@@ -871,7 +871,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setPriority($n = 3)
+	public function setPriority($n = 3): Email
 	{
 		$this->priority = preg_match('/^[1-5]$/', $n) ? (int)$n : 3;
 
@@ -887,7 +887,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setNewline($newline = "\n")
+	public function setNewline($newline = "\n"): Email
 	{
 		$this->newline = in_array($newline, ["\n", "\r\n", "\r"]) ? $newline : "\n";
 
@@ -903,7 +903,7 @@ class Email
 	 *
 	 * @return Email
 	 */
-	public function setCRLF($CRLF = "\n")
+	public function setCRLF($CRLF = "\n"): Email
 	{
 		$this->CRLF = ($CRLF !== "\n" && $CRLF !== "\r\n" && $CRLF !== "\r") ? "\n" : $CRLF;
 

@@ -788,9 +788,9 @@ class Parser extends View
 	 *
 	 * @param bool     $isPair
 	 *
-	 * @return $this
+	 * @return Parser
 	 */
-	public function addPlugin(string $alias, callable $callback, bool $isPair = false)
+	public function addPlugin(string $alias, callable $callback, bool $isPair = false): Parser
 	{
 		$this->plugins[$alias] = $isPair ? [$callback] : $callback;
 
@@ -804,9 +804,9 @@ class Parser extends View
 	 *
 	 * @param string $alias
 	 *
-	 * @return $this
+	 * @return Parser
 	 */
-	public function removePlugin(string $alias)
+	public function removePlugin(string $alias): Parser
 	{
 		unset($this->plugins[$alias]);
 

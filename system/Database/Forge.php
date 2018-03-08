@@ -283,7 +283,7 @@ class Forge
 	 *
 	 * @return    Forge
 	 */
-	public function addKey($key, bool $primary = false, bool $unique = false)
+	public function addKey($key, bool $primary = false, bool $unique = false): Forge
 	{
 		if ($primary === true)
 		{
@@ -342,7 +342,7 @@ class Forge
 	 *
 	 * @return    Forge
 	 */
-	public function addField($field)
+	public function addField($field): Forge
 	{
 		if (is_string($field))
 		{
@@ -389,7 +389,7 @@ class Forge
 	 *
 	 * @return    \CodeIgniter\Database\Forge
 	 */
-	public function addForeignKey($fieldName= '',$tableName = '', $tableField = '', $onUpdate = false, $onDelete = false)
+	public function addForeignKey($fieldName= '',$tableName = '', $tableField = '', $onUpdate = false, $onDelete = false): Forge
 	{
 
             if( ! isset($this->fields[$fieldName]))

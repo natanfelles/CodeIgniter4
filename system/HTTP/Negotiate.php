@@ -78,9 +78,9 @@ class Negotiate
 	 *
 	 * @param RequestInterface $request
 	 *
-	 * @return $this
+	 * @return Negotiate
 	 */
-	public function setRequest(\CodeIgniter\HTTP\RequestInterface $request)
+	public function setRequest(\CodeIgniter\HTTP\RequestInterface $request): Negotiate
 	{
 		$this->request = $request;
 

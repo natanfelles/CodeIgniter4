@@ -174,7 +174,7 @@ class Seeder
 	 *
 	 * @return Seeder
 	 */
-	public function setPath(string $path)
+	public function setPath(string $path): Seeder
 	{
 		$this->seedPath = rtrim($path, '/') . '/';
 
@@ -190,7 +190,7 @@ class Seeder
 	 *
 	 * @return Seeder
 	 */
-	public function setSilent(bool $silent)
+	public function setSilent(bool $silent): Seeder
 	{
 		$this->silent = $silent;
 

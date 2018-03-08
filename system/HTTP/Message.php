@@ -95,9 +95,9 @@ class Message
 	 *
 	 * @param $data
 	 *
-	 * @return Message|Response
+	 * @return Message
 	 */
-	public function setBody($data)
+	public function setBody($data): Message
 	{
 		$this->body = $data;
 
@@ -111,9 +111,9 @@ class Message
 	 *
 	 * @param $data
 	 *
-	 * @return Message|Response
+	 * @return Message
 	 */
-	public function appendBody($data)
+	public function appendBody($data): Message
 	{
 		$this->body .= (string) $data;
 
@@ -262,9 +262,9 @@ class Message
 	 * @param string $name
 	 * @param string $value
 	 *
-	 * @return Message|Response
+	 * @return Message
 	 */
-	public function setHeader(string $name, $value)
+	public function setHeader(string $name, $value): Message
 	{
 		if ( ! isset($this->headers[$name]))
 		{
@@ -301,7 +301,7 @@ class Message
 	 *
 	 * @return Message
 	 */
-	public function removeHeader(string $name)
+	public function removeHeader(string $name): Message
 	{
 		$orig_name = $this->getHeaderName($name);
 
@@ -320,9 +320,9 @@ class Message
 	 * @param string $name
 	 * @param string $value
 	 *
-	 * @return string
+	 * @return Message
 	 */
-	public function appendHeader(string $name, $value)
+	public function appendHeader(string $name, $value): Message
 	{
 		$orig_name = $this->getHeaderName($name);
 
@@ -340,9 +340,9 @@ class Message
 	 * @param string $name
 	 * @param string $value
 	 *
-	 * @return string
+	 * @return Message
 	 */
-	public function prependHeader(string $name, $value)
+	public function prependHeader(string $name, $value): Message
 	{
 		$orig_name = $this->getHeaderName($name);
 
@@ -372,7 +372,7 @@ class Message
 	 *
 	 * @return Message
 	 */
-	public function setProtocolVersion(string $version)
+	public function setProtocolVersion(string $version): Message
 	{
 		if ( ! is_numeric($version))
 		{

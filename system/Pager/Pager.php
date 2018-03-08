@@ -171,9 +171,9 @@ class Pager implements PagerInterface
 	 * @param int    $perPage
 	 * @param int    $total
 	 *
-	 * @return mixed
+	 * @return Pager
 	 */
-	public function store(string $group, int $page, int $perPage, int $total)
+	public function store(string $group, int $page, int $perPage, int $total): Pager
 	{
 		$this->ensureGroup($group);
 
@@ -193,9 +193,9 @@ class Pager implements PagerInterface
 	 * @param string $group
 	 * @param string $path
 	 *
-	 * @return mixed
+	 * @return Pager
 	 */
-	public function setPath(string $path, string $group = 'default')
+	public function setPath(string $path, string $group = 'default'): Pager
 	{
 		$this->ensureGroup($group);
 

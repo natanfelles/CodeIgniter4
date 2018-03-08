@@ -629,9 +629,9 @@ class CodeIgniter
 	 *
 	 * @param string $path
 	 *
-	 * @return $this
+	 * @return CodeIgniter
 	 */
-	public function setPath(string $path)
+	public function setPath(string $path): CodeIgniter
 	{
 		$this->path = $path;
 

@@ -271,10 +271,10 @@ class Response extends Message implements ResponseInterface
 	 *                             provided status code; if none is provided, will
 	 *                             default to the IANA name.
 	 *
-	 * @return self
+	 * @return Response
 	 * @throws \InvalidArgumentException For invalid status code arguments.
 	 */
-	public function setStatusCode(int $code, string $reason = '')
+	public function setStatusCode(int $code, string $reason = ''): Response
 	{
 		// Valid range?
 		if ($code < 100 || $code > 599)
@@ -334,7 +334,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function setDate(\DateTime $date)
+	public function setDate(\DateTime $date): Response
 	{
 		$date->setTimezone(new \DateTimeZone('UTC'));
 
@@ -354,7 +354,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function setContentType(string $mime, string $charset = 'UTF-8')
+	public function setContentType(string $mime, string $charset = 'UTF-8'): Response
 	{
 		// add charset attribute if not already there and provided as parm
 		if ((strpos($mime, 'charset=') < 1) && ! empty($charset))
@@ -381,7 +381,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function noCache(): self
+	public function noCache(): Response
 	{
 		$this->removeHeader('Cache-control');
 
@@ -420,7 +420,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function setCache(array $options = [])
+	public function setCache(array $options = []): Response
 	{
 		if (empty($options))
 		{
@@ -462,7 +462,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function setLastModified($date)
+	public function setLastModified($date): Response
 	{
 		if ($date instanceof \DateTime)
 		{
@@ -487,7 +487,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function send()
+	public function send(): Response
 	{
 		// If we're enforcing a Content Security Policy,
 		// we need to give it a chance to build out it's headers.
@@ -509,7 +509,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function sendHeaders()
+	public function sendHeaders(): Response
 	{
 		// Have the headers already been sent?
 		if (headers_sent())
@@ -543,7 +543,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return Response
 	 */
-	public function sendBody()
+	public function sendBody(): Response
 	{
 		echo $this->body;
 
@@ -559,10 +559,10 @@ class Response extends Message implements ResponseInterface
 	 * @param string $method
 	 * @param int    $code The type of redirection, defaults to 302
 	 *
-	 * @return $this
+	 * @return Response
 	 * @throws \CodeIgniter\HTTP\RedirectException
 	 */
-	public function redirect(string $uri, string $method = 'auto', int $code = null)
+	public function redirect(string $uri, string $method = 'auto', int $code = null): Response
 	{
 		// IIS environment likely? Use 'refresh' for better compatibility
 		if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false)

@@ -90,9 +90,9 @@ class Language
 	 *
 	 * @param string $locale
 	 *
-	 * @return $this
+	 * @return Language
 	 */
-	public function setLocale(string $locale = null)
+	public function setLocale(string $locale = null): Language
 	{
 		if (! is_null($locale))
 		{

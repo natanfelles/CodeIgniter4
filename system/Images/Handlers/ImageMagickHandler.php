@@ -67,7 +67,7 @@ class ImageMagickHandler extends BaseHandler
 	 *
 	 * @return ImageMagickHandler
 	 */
-	public function _resize(bool $maintainRatio = false)
+	public function _resize(bool $maintainRatio = false): ImageMagickHandler
 	{
 		$source = ! empty($this->resource) ? $this->resource : $this->image->getPathname();
 		$destination = $this->getResourcePath();
@@ -91,9 +91,9 @@ class ImageMagickHandler extends BaseHandler
 	/**
 	 * Crops the image.
 	 *
-	 * @return bool|\CodeIgniter\Images\Handlers\ImageMagickHandler
+	 * @return ImageMagickHandler
 	 */
-	public function _crop()
+	public function _crop(): ImageMagickHandler
 	{
 		$source = ! empty($this->resource) ? $this->resource : $this->image->getPathname();
 		$destination = $this->getResourcePath();
@@ -113,9 +113,9 @@ class ImageMagickHandler extends BaseHandler
 	 *
 	 * @param int $angle
 	 *
-	 * @return $this
+	 * @return ImageMagickHandler
 	 */
-	protected function _rotate(int $angle)
+	protected function _rotate(int $angle): ImageMagickHandler
 	{
 		$angle = '-rotate ' . $angle;
 
@@ -138,10 +138,10 @@ class ImageMagickHandler extends BaseHandler
 	 * @param int $green
 	 * @param int $blue
 	 *
-	 * @return $this
+	 * @return ImageMagickHandler
 	 */
-	public function _flatten(int $red = 255, int $green = 255, int $blue = 255){
-
+	public function _flatten(int $red = 255, int $green = 255, int $blue = 255): ImageMagickHandler
+	{
 		$flatten =  "-background RGB({$red},{$green},{$blue}) -flatten";
 
 		$source = ! empty($this->resource) ? $this->resource : $this->image->getPathname();
@@ -161,9 +161,9 @@ class ImageMagickHandler extends BaseHandler
 	 *
 	 * @param string $direction
 	 *
-	 * @return $this
+	 * @return ImageMagickHandler
 	 */
-	public function _flip(string $direction)
+	public function _flip(string $direction): ImageMagickHandler
 	{
 		$angle = $direction == 'horizontal' ? '-flop' : '-flip';
 

@@ -166,9 +166,9 @@ class Entity
 	 * @param string $key
 	 * @param null   $value
 	 *
-	 * @return $this
+	 * @return Entity
 	 */
-	public function __set(string $key, $value = null)
+	public function __set(string $key, $value = null): Entity
 	{
 		$key = $this->mapProperty($key);
 

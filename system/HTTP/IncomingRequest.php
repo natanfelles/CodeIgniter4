@@ -227,7 +227,7 @@ class IncomingRequest extends Request
 	 *
 	 * @return IncomingRequest
 	 */
-	public function setLocale(string $locale)
+	public function setLocale(string $locale): IncomingRequest
 	{
 		// If it's not a valid locale, set it
 		// to the default locale for the site.

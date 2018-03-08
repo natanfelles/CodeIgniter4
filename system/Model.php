@@ -795,7 +795,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function withDeleted($val = true)
+	public function withDeleted($val = true): Model
 	{
 		$this->tempUseSoftDeletes = ! $val;
 
@@ -810,7 +810,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function onlyDeleted()
+	public function onlyDeleted(): Model
 	{
 		$this->tempUseSoftDeletes = false;
 
@@ -830,7 +830,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function asArray()
+	public function asArray(): Model
 	{
 		$this->tempReturnType = 'array';
 
@@ -849,7 +849,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function asObject(string $class = 'object')
+	public function asObject(string $class = 'object'): Model
 	{
 		$this->tempReturnType = $class;
 
@@ -945,7 +945,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function protect(bool $protect = true)
+	public function protect(bool $protect = true): Model
 	{
 		$this->protectFields = $protect;
 
@@ -1062,7 +1062,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function setTable(string $table)
+	public function setTable(string $table): Model
 	{
 		$this->table = $table;
 
@@ -1111,7 +1111,7 @@ class Model
 	 *
 	 * @return Model
 	 */
-	public function skipValidation(bool $skip = true)
+	public function skipValidation(bool $skip = true): Model
 	{
 		$this->skipValidation = $skip;
 

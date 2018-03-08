@@ -132,9 +132,9 @@ class Query implements QueryInterface
 	 * @param string $sql
 	 * @param array $binds
 	 *
-	 * @return mixed
+	 * @return Query
 	 */
-	public function setQuery(string $sql, $binds = null)
+	public function setQuery(string $sql, $binds = null): Query
 	{
 		$this->originalQueryString = $sql;
 
@@ -153,9 +153,9 @@ class Query implements QueryInterface
 	 *
 	 * @param array $binds
 	 *
-	 * @return $this
+	 * @return Query
 	 */
-	public function setBinds(array $binds)
+	public function setBinds(array $binds): Query
 	{
 		$this->binds = $binds;
 
@@ -192,9 +192,9 @@ class Query implements QueryInterface
 	 * @param float $start
 	 * @param float $end
 	 *
-	 * @return mixed
+	 * @return Query
 	 */
-	public function setDuration(float $start, float $end = null)
+	public function setDuration(float $start, float $end = null): Query
 	{
 		$this->startTime = $start;
 
@@ -252,7 +252,7 @@ class Query implements QueryInterface
 	 *
 	 * @return Query
 	 */
-	public function setError(int $code, string $error)
+	public function setError(int $code, string $error): Query
 	{
 		$this->errorCode = $code;
 		$this->errorString = $error;
@@ -317,9 +317,9 @@ class Query implements QueryInterface
 	 * @param string $orig
 	 * @param string $swap
 	 *
-	 * @return mixed
+	 * @return Query
 	 */
-	public function swapPrefix(string $orig, string $swap)
+	public function swapPrefix(string $orig, string $swap): Query
 	{
 		$sql = empty($this->finalQueryString) ? $this->originalQueryString : $this->finalQueryString;
 

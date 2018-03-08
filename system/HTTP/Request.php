@@ -261,7 +261,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return Request
 	 */
-	public function setMethod(string $method)
+	public function setMethod(string $method): Request
 	{
 		$this->method = $method;
 

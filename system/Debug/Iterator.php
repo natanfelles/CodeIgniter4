@@ -67,9 +67,9 @@ class Iterator
 	 * @param          $name
 	 * @param \Closure $closure
 	 *
-	 * @return $this
+	 * @return Iterator
 	 */
-	public function add($name, \Closure $closure)
+	public function add($name, \Closure $closure): Iterator
 	{
 		$name = strtolower($name);
 

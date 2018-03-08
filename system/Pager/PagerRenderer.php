@@ -78,7 +78,7 @@ class PagerRenderer
 	 *
 	 * @return PagerRenderer
 	 */
-	public function setSurroundCount(int $count)
+	public function setSurroundCount(int $count): PagerRenderer
 	{
 		$this->updatePages($count);
 

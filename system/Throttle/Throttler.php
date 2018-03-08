@@ -176,9 +176,9 @@ class Throttler implements ThrottlerInterface
 	 *
 	 * @param int $time
 	 *
-	 * @return $this
+	 * @return Throttler
 	 */
-	public function setTestTime(int $time)
+	public function setTestTime(int $time): Throttler
 	{
 		$this->testTime = $time;
 

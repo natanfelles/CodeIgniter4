@@ -165,7 +165,7 @@ class Autoloader
 	 *
 	 * @return Autoloader
 	 */
-	public function addNamespace($namespace, $path)
+	public function addNamespace($namespace, $path): Autoloader
 	{
 		if (isset($this->prefixes[$namespace]))
 		{
@@ -194,7 +194,7 @@ class Autoloader
 	 *
 	 * @return Autoloader
 	 */
-	public function removeNamespace($namespace)
+	public function removeNamespace($namespace): Autoloader
 	{
 		unset($this->prefixes[$namespace]);
 

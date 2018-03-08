@@ -107,9 +107,9 @@ class Header
 	 *
 	 * @param string $name
 	 *
-	 * @return $this
+	 * @return Header
 	 */
-	public function setName(string $name)
+	public function setName(string $name): Header
 	{
 		$this->name = $name;
 
@@ -123,9 +123,9 @@ class Header
 	 *
 	 * @param null $value
 	 *
-	 * @return $this
+	 * @return Header
 	 */
-	public function setValue($value = null)
+	public function setValue($value = null): Header
 	{
 		$this->value = $value;
 
@@ -140,9 +140,9 @@ class Header
 	 *
 	 * @param null $value
 	 *
-	 * @return $this
+	 * @return Header
 	 */
-	public function appendValue($value = null)
+	public function appendValue($value = null): Header
 	{
 		if ( ! is_array($this->value))
 		{
@@ -162,9 +162,9 @@ class Header
 	 *
 	 * @param null $value
 	 *
-	 * @return $this
+	 * @return Header
 	 */
-	public function prependValue($value = null)
+	public function prependValue($value = null): Header
 	{
 		if ( ! is_array($this->value))
 		{

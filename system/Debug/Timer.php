@@ -70,7 +70,7 @@ class Timer
 	 *
 	 * @return Timer
 	 */
-	public function start(string $name, float $time = null)
+	public function start(string $name, float $time = null): Timer
 	{
 		$this->timers[strtolower($name)] = [
 			'start'	 => ! empty($time) ? $time : microtime(true),
@@ -92,7 +92,7 @@ class Timer
 	 *
 	 * @return Timer
 	 */
-	public function stop(string $name)
+	public function stop(string $name): Timer
 	{
 		$name = strtolower($name);
 

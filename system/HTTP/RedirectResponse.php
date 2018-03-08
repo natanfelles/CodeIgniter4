@@ -111,9 +111,9 @@ class RedirectResponse extends Response
 	 * packaged up with the response. It will then be available via
 	 * the 'old()' helper function.
 	 *
-	 * @return $this
+	 * @return RedirectResponse
 	 */
-	public function withInput()
+	public function withInput(): RedirectResponse
 	{
 		$session = $this->ensureSession();
 
@@ -142,9 +142,9 @@ class RedirectResponse extends Response
 	 * @param string $key
 	 * @param string $message
 	 *
-	 * @return $this
+	 * @return RedirectResponse
 	 */
-	public function with(string $key, $message)
+	public function with(string $key, $message): RedirectResponse
 	{
 		$session = $this->ensureSession();
 

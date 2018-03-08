@@ -170,7 +170,7 @@ class URI
 	 *
 	 * @return URI
 	 */
-	public function setURI(string $uri = null)
+	public function setURI(string $uri = null): URI
 	{
 		if ( ! is_null($uri))
 		{
@@ -304,7 +304,7 @@ class URI
 	 *
 	 * @return URI
 	 */
-	public function showPassword(bool $val = true)
+	public function showPassword(bool $val = true): URI
 	{
 		$this->showPassword = $val;
 
@@ -546,9 +546,9 @@ class URI
 	 *
 	 * @param string $str
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setAuthority(string $str)
+	public function setAuthority(string $str): URI
 	{
 		$parts = parse_url($str);
 
@@ -575,9 +575,9 @@ class URI
 	 *
 	 * @param $str
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setScheme(string $str)
+	public function setScheme(string $str): URI
 	{
 		$str = strtolower($str);
 		$str = preg_replace('#:(//)?$#', '', $str);
@@ -595,9 +595,9 @@ class URI
 	 * @param string $user The user's username
 	 * @param string $pass The user's password
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setUserInfo(string $user, string $pass)
+	public function setUserInfo(string $user, string $pass): URI
 	{
 		$this->user = trim($user);
 		$this->password = trim($pass);
@@ -612,9 +612,9 @@ class URI
 	 *
 	 * @param string $str
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setHost(string $str)
+	public function setHost(string $str): URI
 	{
 		$this->host = trim($str);
 
@@ -628,9 +628,9 @@ class URI
 	 *
 	 * @param int $port
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setPort($port)
+	public function setPort($port): URI
 	{
 		if (is_null($port))
 		{
@@ -654,9 +654,9 @@ class URI
 	 *
 	 * @param string $path
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setPath(string $path)
+	public function setPath(string $path): URI
 	{
 		$this->path = $this->filterPath($path);
 
@@ -673,9 +673,9 @@ class URI
 	 *
 	 * @param string $query
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setQuery(string $query)
+	public function setQuery(string $query): URI
 	{
 		if (strpos($query, '#') !== false)
 		{
@@ -759,9 +759,9 @@ class URI
 	 * @param string $key
 	 * @param null   $value
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function addQuery(string $key, $value = null)
+	public function addQuery(string $key, $value = null): URI
 	{
 		$this->query[$key] = $value;
 
@@ -775,9 +775,9 @@ class URI
 	 *
 	 * @param array ...$params
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function stripQuery(...$params)
+	public function stripQuery(...$params): URI
 	{
 		foreach ($params as $param)
 		{
@@ -795,9 +795,9 @@ class URI
 	 *
 	 * @param array ...$params
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function keepQuery(...$params)
+	public function keepQuery(...$params): URI
 	{
 		$temp = [];
 
@@ -825,9 +825,9 @@ class URI
 	 *
 	 * @param string $string
 	 *
-	 * @return $this
+	 * @return URI
 	 */
-	public function setFragment(string $string)
+	public function setFragment(string $string): URI
 	{
 		$this->fragment = trim($string, '# ');
 

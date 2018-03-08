@@ -104,9 +104,10 @@ class GDHandler extends BaseHandler
 	 * @param int $green
 	 * @param int $blue
 	 *
-	 * @return $this
+	 * @return GDHandler
 	 */
-	public function _flatten(int $red = 255, int $green = 255, int $blue = 255) {
+	public function _flatten(int $red = 255, int $green = 255, int $blue = 255): GDHandler
+	{
 
 		if ( ! ($src = $this->createImage()))
 		{
@@ -146,9 +147,9 @@ class GDHandler extends BaseHandler
 	 *
 	 * @param string $direction
 	 *
-	 * @return $this
+	 * @return GDHandler
 	 */
-	public function _flip(string $direction)
+	public function _flip(string $direction): GDHandler
 	{
 		$srcImg = $this->createImage();
 
@@ -251,9 +252,9 @@ class GDHandler extends BaseHandler
 	 *
 	 * @param string $action
 	 *
-	 * @return $this|bool
+	 * @return GDHandler
 	 */
-	protected function process(string $action)
+	protected function process(string $action): GDHandler
 	{
 		$origWidth = $this->image->origWidth;
 		$origHeight = $this->image->origHeight;

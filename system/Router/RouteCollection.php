@@ -230,7 +230,7 @@ class RouteCollection implements RouteCollectionInterface
 	 * @param string|array $placeholder
 	 * @param string       $pattern
 	 *
-	 * @return mixed
+	 * @return RouteCollectionInterface
 	 */
 	public function addPlaceholder($placeholder, string $pattern = null): RouteCollectionInterface
 	{
@@ -252,7 +252,7 @@ class RouteCollection implements RouteCollectionInterface
 	 *
 	 * @param $value
 	 *
-	 * @return mixed
+	 * @return RouteCollectionInterface
 	 */
 	public function setDefaultNamespace(string $value): RouteCollectionInterface
 	{
@@ -270,7 +270,7 @@ class RouteCollection implements RouteCollectionInterface
 	 *
 	 * @param $value
 	 *
-	 * @return mixed
+	 * @return RouteCollectionInterface
 	 */
 	public function setDefaultController(string $value): RouteCollectionInterface
 	{
@@ -287,7 +287,7 @@ class RouteCollection implements RouteCollectionInterface
 	 *
 	 * @param $value
 	 *
-	 * @return mixed
+	 * @return RouteCollectionInterface
 	 */
 	public function setDefaultMethod(string $value): RouteCollectionInterface
 	{
@@ -307,7 +307,7 @@ class RouteCollection implements RouteCollectionInterface
 	 *
 	 * @param bool $value
 	 *
-	 * @return mixed
+	 * @return RouteCollectionInterface
 	 */
 	public function setTranslateURIDashes(bool $value): RouteCollectionInterface
 	{
@@ -379,9 +379,9 @@ class RouteCollection implements RouteCollectionInterface
 	 *
 	 * @param bool $discover
 	 *
-	 * @return $this
+	 * @return RouteCollection
 	 */
-	public function discoverLocal(bool $discover)
+	public function discoverLocal(bool $discover): RouteCollection
 	{
 		$this->discoverLocal = $discover;
 

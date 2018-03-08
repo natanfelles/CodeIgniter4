@@ -231,9 +231,9 @@ class ContentSecurityPolicy
 	 *
 	 * @param bool|true $value
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function reportOnly(bool $value = true)
+	public function reportOnly(bool $value = true): ContentSecurityPolicy
 	{
 		$this->reportOnly = $value;
 
@@ -252,9 +252,9 @@ class ContentSecurityPolicy
 	 * @param string $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function setBaseURI($uri, bool $reportOnly)
+	public function setBaseURI($uri, bool $reportOnly): ContentSecurityPolicy
 	{
 		$this->baseURI = [(string) $uri => $reportOnly];
 
@@ -276,9 +276,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addChildSrc($uri, bool $reportOnly = false)
+	public function addChildSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'childSrc', $reportOnly);
 
@@ -299,9 +299,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addConnectSrc($uri, bool $reportOnly = false)
+	public function addConnectSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'connectSrc', $reportOnly);
 
@@ -322,9 +322,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function setDefaultSrc($uri, bool $reportOnly = false)
+	public function setDefaultSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->defaultSrc = [(string) $uri => $reportOnly];
 
@@ -344,9 +344,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addFontSrc($uri, bool $reportOnly = false)
+	public function addFontSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'fontSrc', $reportOnly);
 
@@ -364,9 +364,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addFormAction($uri, bool $reportOnly = false)
+	public function addFormAction($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'formAction', $reportOnly);
 
@@ -384,9 +384,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addFrameAncestor($uri, bool $reportOnly = false)
+	public function addFrameAncestor($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'frameAncestors', $reportOnly);
 
@@ -404,9 +404,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addImageSrc($uri, bool $reportOnly = false)
+	public function addImageSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'imageSrc', $reportOnly);
 
@@ -424,9 +424,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addMediaSrc($uri, bool $reportOnly = false)
+	public function addMediaSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'mediaSrc', $reportOnly);
 
@@ -444,9 +444,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addObjectSrc($uri, bool $reportOnly = false)
+	public function addObjectSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'objectSrc', $reportOnly);
 
@@ -464,9 +464,9 @@ class ContentSecurityPolicy
 	 * @param string $mime One or more plugin mime types, separate by spaces
 	 * @param bool   $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addPluginType($mime, bool $reportOnly = false)
+	public function addPluginType($mime, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($mime, 'pluginTypes', $reportOnly);
 
@@ -483,9 +483,9 @@ class ContentSecurityPolicy
 	 *
 	 * @param $uri
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function setReportURI($uri)
+	public function setReportURI($uri): ContentSecurityPolicy
 	{
 		$this->reportURI = (string) $uri;
 
@@ -503,9 +503,9 @@ class ContentSecurityPolicy
 	 * @param bool  $value
 	 * @param array $flags An array of sandbox flags that can be added to the directive.
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function setSandbox(bool $value = true, array $flags = null)
+	public function setSandbox(bool $value = true, array $flags = null): ContentSecurityPolicy
 	{
 		if (empty($this->sandbox) && empty($flags))
 		{
@@ -530,9 +530,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addScriptSrc($uri, bool $reportOnly = false)
+	public function addScriptSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'scriptSrc', $reportOnly);
 
@@ -550,9 +550,9 @@ class ContentSecurityPolicy
 	 * @param      $uri
 	 * @param bool $reportOnly
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function addStyleSrc($uri, bool $reportOnly = false)
+	public function addStyleSrc($uri, bool $reportOnly = false): ContentSecurityPolicy
 	{
 		$this->addOption($uri, 'styleSrc', $reportOnly);
 
@@ -567,9 +567,9 @@ class ContentSecurityPolicy
 	 *
 	 * @param bool|true $value
 	 *
-	 * @return $this
+	 * @return ContentSecurityPolicy
 	 */
-	public function upgradeInsecureRequests(bool $value = true)
+	public function upgradeInsecureRequests(bool $value = true): ContentSecurityPolicy
 	{
 		$this->upgradeInsecureRequests = $value;
 

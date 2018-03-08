@@ -487,7 +487,7 @@ class MigrationRunner
 	 *
 	 * @return MigrationRunner
 	 */
-	public function setNamespace(string $namespace)
+	public function setNamespace(string $namespace): MigrationRunner
 	{
 		$this->namespace = $namespace;
 
@@ -504,7 +504,7 @@ class MigrationRunner
 	 *
 	 * @return MigrationRunner
 	 */
-	public function setGroup(string $group)
+	public function setGroup(string $group): MigrationRunner
 	{
 		$this->group = $group;
 
@@ -558,7 +558,7 @@ class MigrationRunner
 	 *
 	 * @return MigrationRunner
 	 */
-	public function setSilent(bool $silent)
+	public function setSilent(bool $silent): MigrationRunner
 	{
 		$this->silent = $silent;
 
