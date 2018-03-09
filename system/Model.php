@@ -504,12 +504,12 @@ class Model
 	 * Inserts data into the current table. If an object is provided,
 	 * it will attempt to convert it to an array.
 	 *
-	 * @param array|object $data
+	 * @param array|object|null $data
 	 * @param bool         $returnID Whether insert ID should be returned or not.
 	 *
 	 * @return int|string|bool
 	 */
-	public function insert($data, bool $returnID = true)
+	public function insert($data = null, bool $returnID = true)
 	{
 		// If $data is using a custom class with public or protected
 		// properties representing the table elements, we need to grab
@@ -525,6 +525,11 @@ class Model
 		if (is_object($data))
 		{
 			$data = (array) $data;
+		}
+
+		foreach ($this->getTempData('set') as $key => $value)
+		{
+			$data[$key] = $value;
 		}
 
 		// Validate data before saving.
@@ -712,11 +717,6 @@ class Model
 	 */
 	public function update($id = null, $data = null)
 	{
-		foreach ($this->getTempData('set') as $key => $value)
-		{
-			$data[$key] = $value;
-		}
-
 		// If $data is using a custom class with public or protected
 		// properties representing the table elements, we need to grab
 		// them as an array.
@@ -731,6 +731,11 @@ class Model
 		if (is_object($data))
 		{
 			$data = (array) $data;
+		}
+
+		foreach ($this->getTempData('set') as $key => $value)
+		{
+			$data[$key] = $value;
 		}
 
 		// Validate data before saving.
