@@ -880,15 +880,20 @@ class Model
 	 * Deletes a single record from $this->table where $id matches
 	 * the table's primaryKey
 	 *
-	 * @param mixed $id    The rows primary key
-	 * @param bool  $purge Allows overriding the soft deletes setting.
+	 * @param int|string|null $id    The rows primary key
+	 * @param bool  		  $purge Allows overriding the soft deletes setting.
 	 *
 	 * @return mixed
 	 * @throws \CodeIgniter\Database\Exceptions\DatabaseException
 	 */
-	public function delete($id, $purge = false)
+	public function delete($id = null, $purge = false)
 	{
 		$this->trigger('beforeDelete', ['id' => $id, 'purge' => $purge]);
+
+		if ($id)
+		{
+			$this->builder()->where($this->primaryKey, $id);
+		}
 
 		if ($this->useSoftDeletes && ! $purge)
 		{
@@ -899,15 +904,11 @@ class Model
                 $set[$this->updatedField] = $this->setDate();
             }
 
-			$result = $this->builder()
-					->where($this->primaryKey, $id)
-					->update($set);
+			$result = $this->builder()->update($set);
 		}
 		else
 		{
-			$result = $this->builder()
-					->where($this->primaryKey, $id)
-					->delete();
+			$result = $this->builder()->delete();
 		}
 
 		$this->trigger('afterDelete', ['id' => $id, 'purge' => $purge, 'result' => $result, 'data' => null]);
