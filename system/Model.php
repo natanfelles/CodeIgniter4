@@ -612,6 +612,16 @@ class Model
 
 	public function set($key, $value = '')
 	{
+		if (is_array($key))
+		{
+			foreach ($key as $field => $value)
+			{
+				$this->addTempData($field, $value, 'set');
+			}
+
+			return $this;
+		}
+
 		$this->addTempData($key, $value, 'set');
 
 		return $this;
