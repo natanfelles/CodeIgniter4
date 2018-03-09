@@ -251,6 +251,8 @@ class Model
 	protected $beforeDelete = [];
 	protected $afterDelete = [];
 
+	private $tempData = [];
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -608,6 +610,129 @@ class Model
 
 	//--------------------------------------------------------------------
 
+	private function addTempData($key, $value, $type)
+	{
+		$key = $this->builder()->objectToArray($key);
+
+		if ( ! is_array($key))
+		{
+			$key = [$key => $value];
+		}
+
+		$this->tempData[$type][] = $key;
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+	private function getTempData($type): array
+	{
+		return $this->tempData[$type] ?? [];
+	}
+
+	//--------------------------------------------------------------------
+
+	public function set($key, $value = '')
+	{
+		$this->addTempData($key, $value, 'set');
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+	public function setInsertBatch($key, $value = '')
+	{
+		$this->addTempData($key, $value, 'setInsertBatch');
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+	public function setUpdateBatch($key, $value = '')
+	{
+		$this->addTempData($key, $value, 'setUpdateBatch');
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * [insertBatch description]
+	 *
+	 * @param array $data Array of array or object items
+	 *
+	 * @return int|bool Number of rows inserted or FALSE on failure
+	 */
+	public function insertBatch(array $data)
+	{
+		foreach ($this->getTempData('setInsertBatch') as $key => $value)
+		{
+			//$this->builder()->setInsertBatch($key, $value, false);
+			$data[][$key] = $value;
+		}
+
+		$originalData = $data;
+
+		$count = count($data);
+
+		$date = $this->setDate();
+
+		for ($i = 0; $i < $count; $i++)
+		{
+			if (is_object($data[$i]) && ! $data[$i] instanceof \stdClass)
+			{
+				$data[$i] = static::classToArray($data[$i], $this->dateFormat);
+			}
+
+			if (is_object($data[$i]))
+			{
+				$data[$i] = (array) $data[$i];
+			}
+
+			if ($this->skipValidation === false)
+			{
+				if ($this->validate($data[$i]) === false)
+				{
+					return false;
+				}
+
+				if (! in_array($this->primaryKey, $data[$i]))
+				{
+					// TODO: Show error
+					//return false
+					throw new \InvalidArgumentException("The data row {$i} don't have the Primary Key.");
+				}
+			}
+
+			$data[$i] = $this->doProtectFields($data[$i]);
+
+			if ($this->useTimestamps && ! array_key_exists($this->createdField, $data[$i]))
+			{
+				$data[$i][$this->createdField] = $date;
+				$data[$i][$this->updatedField] = $date;
+			}
+		}
+
+		$data = $this->trigger('beforeInsert', ['data' => $data]);
+
+		if (empty($data))
+		{
+			throw new \InvalidArgumentException('No data to insert.');
+		}
+
+		$affectedRows = $this->builder()->insertBatch($data['data'], true, 100, false);
+
+		$this->trigger('afterInsert', ['data' => $originalData, 'result' => $affectedRows]);
+
+		return $affectedRows;
+	}
+
+	//--------------------------------------------------------------------
+
 	/**
 	 * Updates a single record in $this->table. If an object is provided,
 	 * it will attempt to convert it into an array.
@@ -674,6 +799,79 @@ class Model
 		$this->trigger('afterUpdate', ['id' => $id, 'data' => $originalData, 'result' => $result]);
 
 		return $result;
+	}
+
+	//--------------------------------------------------------------------
+
+	public function replace($set = null)
+	{
+		// TODO:
+		$this->builder()->replace($set, false);
+	}
+
+	//--------------------------------------------------------------------
+
+	public function updateBatch($data)
+	{
+		foreach ($this->getTempData('setUpdateBatch') as $key => $value)
+		{
+			//$this->builder()->setUpdateBatch($key, $value, false);
+			$data[][$key] = $value;
+		}
+
+		$originalData = $data;
+
+		$count = count($data);
+
+		$date = $this->setDate();
+
+		for ($i = 0; $i < $count; $i++)
+		{
+			if (is_object($data[$i]) && ! $data[$i] instanceof \stdClass)
+			{
+				$data[$i] = static::classToArray($data[$i], $this->dateFormat);
+			}
+
+			if (is_object($data[$i]))
+			{
+				$data[$i] = (array) $data[$i];
+			}
+
+			if ($this->skipValidation === false)
+			{
+				if ($this->validate($data[$i]) === false)
+				{
+					return false;
+				}
+
+				if (! in_array($this->primaryKey, $data[$i]))
+				{
+					// TODO: Show error
+					//return false
+					throw new \InvalidArgumentException("The data row {$i} don't have the Primary Key.");
+				}
+			}
+
+			$data[$i] = $this->doProtectFields($data[$i]);
+
+			if ($this->useTimestamps && ! array_key_exists($this->updatedField, $data[$i]))
+			{
+				$data[$i][$this->updatedField] = $date;
+			}
+		}
+
+		$data = $this->trigger('beforeUpdate', ['data' => $data]);
+
+		if (empty($data))
+		{
+			throw new \InvalidArgumentException('No data to update.');
+		}
+
+		$affectedRows = $this->builder()->updateBatch($data['data'], $this->primaryKey, 100, false);
+
+		$this->trigger('afterUpdate', ['data' => $originalData, 'result' => $affectedRows]);
+
+		return $affectedRows;
 	}
 
 	//--------------------------------------------------------------------
