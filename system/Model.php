@@ -585,14 +585,18 @@ class Model
 
 	private function addTempData($key, $value, $type)
 	{
-		$key = $this->builder()->objectToArray($key);
-
-		if ( ! is_array($key))
+		// TODO: Convert objects to array
+		if (is_array($key))
 		{
-			$key = [$key => $value];
+			foreach ($key as $row)
+			{
+				$this->tempData[$type][] = $row;
+			}
+
+			return $this;
 		}
 
-		$this->tempData[$type][] = $key;
+		$this->tempData[$type][$key] = $value;
 
 		return $this;
 	}
@@ -640,12 +644,11 @@ class Model
 	 *
 	 * @return int|bool Number of rows inserted or FALSE on failure
 	 */
-	public function insertBatch(array $data)
+	public function insertBatch(array $data = [])
 	{
-		foreach ($this->getTempData('setInsertBatch') as $key => $value)
+		foreach ($this->getTempData('setInsertBatch') as $tempData)
 		{
-			//$this->builder()->setInsertBatch($key, $value, false);
-			$data[][$key] = $value;
+			$data[] = $tempData;
 		}
 
 		$originalData = $data;
@@ -671,13 +674,6 @@ class Model
 				if ($this->validate($data[$i]) === false)
 				{
 					return false;
-				}
-
-				if (! in_array($this->primaryKey, $data[$i]))
-				{
-					// TODO: Show error
-					//return false
-					throw new \InvalidArgumentException("The data row {$i} don't have the Primary Key.");
 				}
 			}
 
@@ -791,12 +787,11 @@ class Model
 
 	//--------------------------------------------------------------------
 
-	public function updateBatch($data)
+	public function updateBatch(array $data = [])
 	{
-		foreach ($this->getTempData('setUpdateBatch') as $key => $value)
+		foreach ($this->getTempData('setUpdateBatch') as $tempData)
 		{
-			//$this->builder()->setUpdateBatch($key, $value, false);
-			$data[][$key] = $value;
+			$data[] = $tempData;
 		}
 
 		$originalData = $data;
@@ -824,15 +819,13 @@ class Model
 					return false;
 				}
 
-				if (! in_array($this->primaryKey, $data[$i]))
+				if (! array_key_exists($this->primaryKey, $data[$i]))
 				{
-					// TODO: Show error
-					//return false
 					throw new \InvalidArgumentException("The data row {$i} don't have the Primary Key.");
 				}
 			}
-
-			$data[$i] = $this->doProtectFields($data[$i]);
+			// TODO: doProtectFields needs to auto allow the id here
+			//$data[$i] = $this->doProtectFields($data[$i]);
 
 			if ($this->useTimestamps && ! array_key_exists($this->updatedField, $data[$i]))
 			{
