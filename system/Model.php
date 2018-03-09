@@ -742,8 +742,13 @@ class Model
 	 *
 	 * @return bool
 	 */
-	public function update($id, $data)
+	public function update($id = null, $data = null)
 	{
+		foreach ($this->getTempData('set') as $key => $value)
+		{
+			$data[$key] = $value;
+		}
+
 		// If $data is using a custom class with public or protected
 		// properties representing the table elements, we need to grab
 		// them as an array.
@@ -790,11 +795,13 @@ class Model
 			throw new \InvalidArgumentException('No data to update.');
 		}
 
+		if ($id)
+		{
+			$this->builder()->where($this->primaryKey, $id);
+		}
+
 		// Must use the set() method to ensure objects get converted to arrays
-		$result = $this->builder()
-				->where($this->primaryKey, $id)
-				->set($data['data'])
-				->update();
+		$result = $this->builder()->set($data['data'])->update();
 
 		$this->trigger('afterUpdate', ['id' => $id, 'data' => $originalData, 'result' => $result]);
 
