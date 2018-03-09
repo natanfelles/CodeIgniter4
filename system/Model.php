@@ -301,11 +301,11 @@ class Model
 	 * Fetches the row of database from $this->table with a primary key
 	 * matching $id.
 	 *
-	 * @param int|string|array|null $id One primary key or an array of primary keys
+	 * @param int|string|array $id One primary key or an array of primary keys
 	 *
 	 * @return array|object|null    The resulting row of data, or null.
 	 */
-	public function find($id = null)
+	public function find($id)
 	{
 		$builder = $this->builder();
 
@@ -320,16 +320,12 @@ class Model
 					->get();
 			$row = $row->getResult($this->tempReturnType);
 		}
-		elseif($id)
+		else
 		{
 			$row = $builder->where($this->table.'.'.$this->primaryKey, $id)
 					->get();
 
 			$row = $row->getFirstRow($this->tempReturnType);
-		}
-		else
-		{
-			$row = $row->getResult($this->tempReturnType);
 		}
 
 		$row = $this->trigger('afterFind', ['id' => $id, 'data' => $row]);
