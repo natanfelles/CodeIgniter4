@@ -99,7 +99,7 @@ class Model
 	 * The Database connection group that
 	 * should be instantiated.
 	 *
-	 * @var string
+	 * @var array|string
 	 */
 	protected $DBGroup;
 
@@ -196,16 +196,21 @@ class Model
 	/**
 	 * Database Connection
 	 *
-	 * @var ConnectionInterface
+	 * @var ConnectionInterface[]|BaseConnection[]
 	 */
 	protected $db;
 
 	/**
 	 * Query Builder object
 	 *
-	 * @var BaseBuilder
+	 * @var BaseBuilder[]
 	 */
 	protected $builder;
+
+	/**
+	 * @var string
+	 */
+	protected $lastConnectionType;
 
 	/**
 	 * Rules used to validate data in insert, update, and save methods.
@@ -278,11 +283,12 @@ class Model
 	{
 		if ($db instanceof ConnectionInterface)
 		{
+			// TODO: Allow read/write connections
 			$this->db = & $db;
 		}
 		else
 		{
-			$this->db = Database::connect($this->DBGroup);
+			//$this->db = Database::connect($this->DBGroup);
 		}
 
 		$this->tempReturnType     = $this->returnType;
@@ -294,6 +300,38 @@ class Model
 		}
 
 		$this->validation = $validation;
+	}
+
+	/**
+	 * @param string $type "read" or "write"
+	 *
+	 * @return ConnectionInterface|BaseConnection
+	 */
+	protected function getConnection(string $type)
+	{
+		$this->lastConnectionType = $type;
+
+		if (empty($this->db[$type]) || ! $this->db[$type] instanceof BaseConnection)
+		{
+			$this->db[$type] = Database::connect($this->getDBGroup($type));
+		}
+
+		return $this->db[$type];
+	}
+
+	/**
+	 * @param string|null $type
+	 *
+	 * @return array|string
+	 */
+	protected function getDBGroup(string $type = null)
+	{
+		if ($type && ! in_array($type, ['read', 'write']))
+		{
+			throw new \Exception('Invalid DBGroup type. Must be read or write');
+		}
+
+		return $this->DBGroup[$type] ?? $this->DBGroup;
 	}
 
 	//--------------------------------------------------------------------
@@ -311,7 +349,7 @@ class Model
 	 */
 	public function find($id = null)
 	{
-		$builder = $this->builder();
+		$builder = $this->builder('read');
 
 		if ($this->tempUseSoftDeletes === true)
 		{
@@ -359,7 +397,7 @@ class Model
 	 */
 	public function findAll(int $limit = 0, int $offset = 0)
 	{
-		$builder = $this->builder();
+		$builder = $this->builder('read');
 
 		if ($this->tempUseSoftDeletes === true)
 		{
@@ -389,7 +427,7 @@ class Model
 	 */
 	public function first()
 	{
-		$builder = $this->builder();
+		$builder = $this->builder('read');
 
 		if ($this->tempUseSoftDeletes === true)
 		{
@@ -630,7 +668,7 @@ class Model
 		}
 
 		// Must use the set() method to ensure objects get converted to arrays
-		$result = $this->builder()
+		$result = $this->builder('write')
 				->set($data['data'], '', $escape)
 				->insert();
 
@@ -642,7 +680,7 @@ class Model
 			return $result;
 		}
 
-		$this->insertID = $this->db->insertID();
+		$this->insertID = $this->getConnection('write')->insertID();
 
 		// otherwise return the insertID, if requested.
 		return $returnID ? $this->insertID : $result;
@@ -674,7 +712,7 @@ class Model
 			}
 		}
 
-		return $this->builder()->insertBatch($set, $escape, $batchSize, $testing);
+		return $this->builder('write')->insertBatch($set, $escape, $batchSize, $testing);
 	}
 
 	//--------------------------------------------------------------------
@@ -750,7 +788,7 @@ class Model
 			throw DataException::forEmptyDataset('update');
 		}
 
-		$builder = $this->builder();
+		$builder = $this->builder('write');
 
 		if ($id)
 		{
@@ -795,7 +833,7 @@ class Model
 			}
 		}
 
-		return $this->builder()->updateBatch($set, $index, $batchSize, $returnSQL);
+		return $this->builder('write')->updateBatch($set, $index, $batchSize, $returnSQL);
 	}
 
 	//--------------------------------------------------------------------
@@ -817,7 +855,7 @@ class Model
 			$id = [$id];
 		}
 
-		$builder = $this->builder();
+		$builder = $this->builder('write');
 		if (! empty($id))
 		{
 			$builder = $builder->whereIn($this->primaryKey, $id);
@@ -861,7 +899,7 @@ class Model
 			return true;
 		}
 
-		return $this->builder()
+		return $this->builder('write')
 						->where($this->deletedField, 1)
 						->delete();
 	}
@@ -895,7 +933,7 @@ class Model
 	{
 		$this->tempUseSoftDeletes = false;
 
-		$this->builder()
+		$this->builder('read')
 				->where($this->deletedField, 1);
 
 		return $this;
@@ -924,7 +962,7 @@ class Model
 			}
 		}
 
-		return $this->builder()->replace($data, $returnSQL);
+		return $this->builder('write')->replace($data, $returnSQL);
 	}
 
 	//--------------------------------------------------------------------
@@ -976,14 +1014,14 @@ class Model
 	 */
 	public function chunk($size = 100, \Closure $userFunc)
 	{
-		$total = $this->builder()
+		$total = $this->builder('read')
 				->countAllResults(false);
 
 		$offset = 0;
 
 		while ($offset <= $total)
 		{
-			$builder = clone($this->builder());
+			$builder = clone($this->builder('read'));
 
 			$rows = $builder->get($size, $offset);
 
@@ -1064,28 +1102,23 @@ class Model
 	/**
 	 * Provides a shared instance of the Query Builder.
 	 *
-	 * @param string $table
+	 * @param string      $table
+	 * @param string|null $conn_type Connection type: "read" or "write"
 	 *
 	 * @return BaseBuilder
 	 */
-	protected function builder(string $table = null)
+	protected function builder(string $conn_type, string $table = null)
 	{
-		if ($this->builder instanceof BaseBuilder)
+		if (isset($this->builder[$conn_type]) && $this->builder[$conn_type] instanceof BaseBuilder)
 		{
-			return $this->builder;
+			return $this->builder[$conn_type];
 		}
 
 		$table = empty($table) ? $this->table : $table;
 
-		// Ensure we have a good db connection
-		if (! $this->db instanceof BaseConnection)
-		{
-			$this->db = Database::connect($this->DBGroup);
-		}
+		$this->builder[$conn_type] = $this->getConnection($conn_type)->table($table);
 
-		$this->builder = $this->db->table($table);
-
-		return $this->builder;
+		return $this->builder[$conn_type];
 	}
 
 	//--------------------------------------------------------------------
@@ -1204,7 +1237,7 @@ class Model
 		}
 
 		// Still here? Grab the database-specific error, if any.
-		$error = $this->db->getError();
+		$error = $this->getConnection($this->lastConnectionType)->getError();
 
 		return $error['message'] ?? null;
 	}
@@ -1328,6 +1361,7 @@ class Model
 	 * Returns the model's defined validation rules so that they
 	 * can be used elsewhere, if needed.
 	 *
+	 * @var    array $options "except" or "only" fields
 	 * @return array
 	 */
 	public function getValidationRules(array $options = [])
@@ -1420,13 +1454,13 @@ class Model
 		{
 			return $this->{$name};
 		}
-		elseif (isset($this->db->$name))
+		elseif (isset($this->getConnection($this->lastConnectionType)->$name))
 		{
-			return $this->db->$name;
+			return $this->getConnection($this->lastConnectionType)->$name;
 		}
-		elseif (isset($this->builder()->$name))
+		elseif (isset($this->builder($this->lastConnectionType)->$name))
 		{
-			return $this->builder()->$name;
+			return $this->builder($this->lastConnectionType)->$name;
 		}
 
 		return null;
@@ -1447,11 +1481,11 @@ class Model
 	{
 		$result = null;
 
-		if (method_exists($this->db, $name))
+		if (method_exists($this->getConnection($this->lastConnectionType), $name))
 		{
-			$result = $this->db->$name(...$params);
+			$result = $this->getConnection($this->lastConnectionType)->$name(...$params);
 		}
-		elseif (method_exists($builder = $this->builder(), $name))
+		elseif (method_exists($builder = $this->builder($this->lastConnectionType), $name))
 		{
 			$result = $builder->$name(...$params);
 		}
